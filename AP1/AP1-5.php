@@ -41,5 +41,5 @@ try {
     $id = $conn->insert_id;
     echo "Se a realizado con exito la inserción de la nueva id: " . $id . "<br>";
 
-} catch (mysqli_sql_exception)
+} catch (mysqli_sql_exception $e)
 
