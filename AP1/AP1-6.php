@@ -48,6 +48,7 @@ class Database
     */
     public function getConect(): mysqli
     {
+        //Esto no ejecuta ninguna consulta SQL, simplemente te entrega el “puente” abierto con la base de datos para que lo uses.
         return $this->conect;
     }
 
@@ -89,7 +90,49 @@ class Database
         }
     }
 
-    public function insert
+    public function insert(string $sql=null):int
+    {
+        try {
+            $result= $this->query($sql);
+            if(is_null($result)){
+                die("No se ha recibido la sentencia correctamente<br>");
+            }elseif(!$result){ //En este caso detecta si la consulta falló (por ejemplo, error de sintaxis en el SQL o la tabla no existe)
+                die("Se ha producido un fallo realizando la inserción<br>");
+            }else{
+                //se ha recibido la inserción correctamente.
+                $id = $this->getConect()->insert_id;
+                $this->closeConection();
+                echo " se ha realizado correctamente la inserción con la nueva id:" . $id . "<br>";
+                return $id;
+            }
+        }catch (mysqli_sql_exception $e) {
+            die ("Se ha producido el siguiente error:<br>". $e->getMessage() . ".En la linea: " . $e->getLine(). "<br>")
+        }
+    }
+
+    /**
+     * Esta función sirve igual para borrar una línea como para actualziarla
+     * @param string|null $sql
+     * @return bool
+     */
+
+    public function update_delete(string $sql):bool
+    {
+        try{
+            $result=$this->query($sql);
+            $this->closeConection();
+            if(is_null($result)) {
+                die ("No se ha recibido la sentencia correctamente<br>");
+            }elseif (!$result){
+                die ("Se ha producido un fallo realizando la busqueda<br>");
+            }else{
+                return true;
+            }
+        }catch (mysqli_sql_exception $e) {
+            die("se ha producido el siguiente error:<br>" . $e->getMessage() . ".En la linea: " . $e->getLine(). "<br>");
+        }
+    }
+
 }
 
 
