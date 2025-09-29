@@ -1,4 +1,30 @@
 <?php
+
+//Instancias iniciales
+$db = new Database();
+$datos = $db->select("SELECT * FROM usuarios");
+foreach ($datos as $value){
+    echo "El usuario ".$value["nombre"]." posee la id:".$value["id"]." y su estado es:".$value["estado"]."<br>";
+}
+$datos = $db->select("SELECT * FROM operaciones");
+foreach ($datos as $value){
+    //Imporante estamos realizando una select que devuelve un array por lo tanto tenemos que tenerlo encuenta
+    $user = $db->select("SELECT nombre FROM usuarios WHERE id=".$value["id"]);
+    //Al ser un array, no podemos acceder directamente al resultado tenemos una matriz realmente. Por eso será la posición 0.
+    echo "La operación con la id: ".$value["id"]." ha obtenido un resultado:".$value["resultado"]." y la ha realizado el usuario:".$user[0]["nombre"]."<br>";
+}
+$id = $db->insert("INSERT INTO usuarios (nombre, estado) VALUES('Ramona',false)");
+echo $id."<br>";
+if($db->update_delete("UPDATE usuarios SET estado=true WHERE id=".$id)){
+    echo "Se ha realizado correctamente la actualización del usuario id:".$id."<br>";
+}
+$datos = $db->select("SELECT * FROM usuarios");
+foreach ($datos as $value){
+    echo "El usuario ".$value["nombre"]." posee la id:".$value["id"]." y su estado es:".$value["estado"]."<br>";
+}
+if($db->update_delete("DELETE FROM usuarios WHERE id=".$id)){
+    echo "Se ha realizado correctamente el borrado del usuario id:".$id."<br>";
+}
 class Database
 {
     private const SERVER = "mariadb-server";
@@ -106,7 +132,7 @@ class Database
                 return $id;
             }
         }catch (mysqli_sql_exception $e) {
-            die ("Se ha producido el siguiente error:<br>". $e->getMessage() . ".En la linea: " . $e->getLine(). "<br>")
+            die ("Se ha producido el siguiente error:<br>". $e->getMessage() . ".En la linea: " . $e->getLine(). "<br>");
         }
     }
 
