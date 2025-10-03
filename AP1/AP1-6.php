@@ -3,28 +3,29 @@
 //Instancias iniciales
 $db = new Database();
 $datos = $db->select("SELECT * FROM usuarios");
-foreach ($datos as $value){
-    echo "El usuario ".$value["nombre"]." posee la id:".$value["id"]." y su estado es:".$value["estado"]."<br>";
+foreach ($datos as $value) {
+    echo "El usuario " . $value["nombre"] . " posee la id:" . $value["id"] . " y su estado es:" . $value["estado"] . "<br>";
 }
 $datos = $db->select("SELECT * FROM operaciones");
-foreach ($datos as $value){
+foreach ($datos as $value) {
     //Imporante estamos realizando una select que devuelve un array por lo tanto tenemos que tenerlo encuenta
-    $user = $db->select("SELECT nombre FROM usuarios WHERE id=".$value["id"]);
+    $user = $db->select("SELECT nombre FROM usuarios WHERE id=" . $value["id"]);
     //Al ser un array, no podemos acceder directamente al resultado tenemos una matriz realmente. Por eso será la posición 0.
-    echo "La operación con la id: ".$value["id"]." ha obtenido un resultado:".$value["resultado"]." y la ha realizado el usuario:".$user[0]["nombre"]."<br>";
+    echo "La operación con la id: " . $value["id"] . " ha obtenido un resultado:" . $value["resultado"] . " y la ha realizado el usuario:" . $user[0]["nombre"] . "<br>";
 }
 $id = $db->insert("INSERT INTO usuarios (nombre, estado) VALUES('Ramona',false)");
-echo $id."<br>";
-if($db->update_delete("UPDATE usuarios SET estado=true WHERE id=".$id)){
-    echo "Se ha realizado correctamente la actualización del usuario id:".$id."<br>";
+echo $id . "<br>";
+if ($db->update_delete("UPDATE usuarios SET estado=true WHERE id=" . $id)) {
+    echo "Se ha realizado correctamente la actualización del usuario id:" . $id . "<br>";
 }
 $datos = $db->select("SELECT * FROM usuarios");
-foreach ($datos as $value){
-    echo "El usuario ".$value["nombre"]." posee la id:".$value["id"]." y su estado es:".$value["estado"]."<br>";
+foreach ($datos as $value) {
+    echo "El usuario " . $value["nombre"] . " posee la id:" . $value["id"] . " y su estado es:" . $value["estado"] . "<br>";
 }
-if($db->update_delete("DELETE FROM usuarios WHERE id=".$id)){
-    echo "Se ha realizado correctamente el borrado del usuario id:".$id."<br>";
+if ($db->update_delete("DELETE FROM usuarios WHERE id=" . $id)) {
+    echo "Se ha realizado correctamente el borrado del usuario id:" . $id . "<br>";
 }
+
 class Database
 {
     private const SERVER = "mariadb-server";
@@ -44,9 +45,9 @@ class Database
         //conexion a bbdd
         $this->conect = new mysqli(self::SERVER, self::USERNAME, self::PASSWORD, self::DB);
         //verificamos errores
-        if($this->conect->connect_error) {
+        if ($this->conect->connect_error) {
             //si falla detenemos el script y mostramos el aviso
-            die("conexión fallida: " . $this->conect->connect_errno . " --> " . $this->conect->connect_error );
+            die("conexión fallida: " . $this->conect->connect_errno . " --> " . $this->conect->connect_error);
             /**
              * Hay que asegurar que la conexión siempre finaliza.
              */
@@ -64,14 +65,14 @@ class Database
      * Función que se encarga de cerrar la conexión con la BBDD, evitando el consumo de recursos.
      * @return void
      */
-    public function closeConection():void
+    public function closeConection(): void
     {
         $this->conect->close();
     }
 
     /** getter de la conexión
      * @return mysqli
-    */
+     */
     public function getConect(): mysqli
     {
         //Esto no ejecuta ninguna consulta SQL, simplemente te entrega el “puente” abierto con la base de datos para que lo uses.
@@ -79,12 +80,12 @@ class Database
     }
 
     // metodo para realizar una busqueda a partir de una sentencia
-    private function query(string $sql=null):bool|mysqli_result|null
+    private function query(string $sql = null): bool|mysqli_result|null
     {
-        if(is_null($sql)) {
+        if (is_null($sql)) {
             //Devolvemos un valor nulo para indicar que no no se ha recibido parámetro de busqueda
             return null;
-        }else {
+        } else {
             return $this->conect->query($sql);
         }
     }
@@ -95,19 +96,19 @@ class Database
      * @return mysqli_result|bool
      */
 
-    public function select(string $sql=null):mysqli_result|bool|array
+    public function select(string $sql = null): mysqli_result|bool|array
     {
-        $result= $this->query($sql);
-        if(is_null($result)){
+        $result = $this->query($sql);
+        if (is_null($result)) {
             die("No se ha recibido la sentencia correctamente<br>");
-        }elseif(!$result){ //En este caso detecta si la consulta falló (por ejemplo, error de sintaxis en el SQL o la tabla no existe)
+        } elseif (!$result) { //En este caso detecta si la consulta falló (por ejemplo, error de sintaxis en el SQL o la tabla no existe)
             die("Se ha producido un fallo realizando la busqueda<br>");
-        }else{
-            if($result->num_rows<= 0){
+        } else {
+            if ($result->num_rows <= 0) {
                 echo "0 resultados obtenidos";
                 $this->closeConection();
                 return false;
-            }else{
+            } else {
                 //Si tiene filas → devuelve un array con todos los resultados (fetch_all).
                 // MYSQLI_ASSOC → devuelve un array asociativo, es decir, con los nombres de las columnas como claves.
                 // Es una constante predefinida
@@ -116,23 +117,23 @@ class Database
         }
     }
 
-    public function insert(string $sql=null):int
+    public function insert(string $sql = null): int
     {
         try {
-            $result= $this->query($sql);
-            if(is_null($result)){
+            $result = $this->query($sql);
+            if (is_null($result)) {
                 die("No se ha recibido la sentencia correctamente<br>");
-            }elseif(!$result){ //En este caso detecta si la consulta falló (por ejemplo, error de sintaxis en el SQL o la tabla no existe)
+            } elseif (!$result) { //En este caso detecta si la consulta falló (por ejemplo, error de sintaxis en el SQL o la tabla no existe)
                 die("Se ha producido un fallo realizando la inserción<br>");
-            }else{
+            } else {
                 //se ha recibido la inserción correctamente.
                 $id = $this->getConect()->insert_id;
                 $this->closeConection();
                 echo " se ha realizado correctamente la inserción con la nueva id:" . $id . "<br>";
                 return $id;
             }
-        }catch (mysqli_sql_exception $e) {
-            die ("Se ha producido el siguiente error:<br>". $e->getMessage() . ".En la linea: " . $e->getLine(). "<br>");
+        } catch (mysqli_sql_exception $e) {
+            die ("Se ha producido el siguiente error:<br>" . $e->getMessage() . ".En la linea: " . $e->getLine() . "<br>");
         }
     }
 
@@ -142,20 +143,20 @@ class Database
      * @return bool
      */
 
-    public function update_delete(string $sql):bool
+    public function update_delete(string $sql): bool
     {
-        try{
-            $result=$this->query($sql);
+        try {
+            $result = $this->query($sql);
             $this->closeConection();
-            if(is_null($result)) {
+            if (is_null($result)) {
                 die ("No se ha recibido la sentencia correctamente<br>");
-            }elseif (!$result){
+            } elseif (!$result) {
                 die ("Se ha producido un fallo realizando la busqueda<br>");
-            }else{
+            } else {
                 return true;
             }
-        }catch (mysqli_sql_exception $e) {
-            die("se ha producido el siguiente error:<br>" . $e->getMessage() . ".En la linea: " . $e->getLine(). "<br>");
+        } catch (mysqli_sql_exception $e) {
+            die("se ha producido el siguiente error:<br>" . $e->getMessage() . ".En la linea: " . $e->getLine() . "<br>");
         }
     }
 
