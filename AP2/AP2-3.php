@@ -5,5 +5,5 @@
 
 class DatabaseConnection
 {
-
+    private
 }
