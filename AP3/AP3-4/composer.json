@@ -1,0 +1,14 @@
+{
+    "name": "root/ap3-4",
+    "autoload": {
+        "psr-4": {
+            "Root\\Ap34\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AP34"
+        }
+    ],
+    "require": {}
+}
