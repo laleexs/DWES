@@ -1,12 +1,11 @@
 <?php
 
-namespace models; // al crea el Model.php con formato para clase, me crea el namespace
 
 class Model
 {
     private array $data; // declaramos que la propiedad data será un array
 
-    private function __construct()
+    public function __construct() // constructor publico porque debemos acceder a el desde fuera
     {
         $this->data = array(
             "title" => "MVC Sencillo PHP",

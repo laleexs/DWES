@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../models/Model.php';
 require_once __DIR__ .  '/../views/View.php';
 
+
+
 class Controller
 {
     private Model $modelo;
@@ -18,10 +20,16 @@ class Controller
         $this->datos = $this->modelo->getData();
     }
 
-    private function enviarDatosVista()
+    public function enviarDatosVista()
     {
         if(!isset($this->vista)){
-
+            $this->vista = new View();
         }
+
+        //Solicitamos los datos almacenados en el Modelo
+        $this->pedirDatos();
+
+        $this->vista->render($this->datos);
+
     }
 }
