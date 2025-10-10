@@ -36,4 +36,9 @@ class Database
             die ("Error de conexión: " . self::$conexion->connect_error);
         }
     }
+
+    public function executeSQL($sql)
+    {
+        return self::$conexion->query($sql)->fetch_all(MYSQLI_ASSOC);
+    }
 }
