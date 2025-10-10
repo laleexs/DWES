@@ -1,0 +1,6 @@
+{
+  "host": "mariaDB-server",
+  "user": "root",
+  "password": "root",
+  "db": "todolist"
+}
