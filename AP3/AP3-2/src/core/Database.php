@@ -8,7 +8,7 @@ class Database
 
     private function __construct()
     {
-        $json= file_get_contents(__DIR__ . '/../config/dbConfig.json');
+        $json= file_get_contents(__DIR__ . '/../../config/dbConfig.json');
         $dbConfig = json_decode($json, true);// crea aray asociativo del string de file_get_contents
         self::$conexion = new mysqli($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['db']);
     }
