@@ -10,6 +10,8 @@ class Database
 
     private const USERNAME = "root";
 
+    private const PASSWORD = "root";
+
     private const DB = "todolist";
 
 
@@ -21,7 +23,17 @@ class Database
     public static function getInstance()
     {
         if (self::$instacia === null) {
+            self::$instancia = new Database();
+        }
+        return self::$instancia;
+    }
 
+    public function getConexion() // creando la conexión
+    {
+        self::$conexion = new mysqli(self::SERVER, self::USERNAME, self::PASSWORD, self::DB);
+
+        if(self::$conexion->connect_error) {
+            die ("Error de conexión: " . self::$conexion->connect_error);
         }
     }
 }
