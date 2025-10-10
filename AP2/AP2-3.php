@@ -19,9 +19,9 @@ class DatabaseConnection
     }
 
     // Este método se asegura de que la instacia sea creada una sola vez.
-    public static function  getInstance()
+    public static function getInstance()
     {
-        if(self::$instancia === null){
+        if (self::$instancia === null) {
             self::$instancia = new DatabaseConnection();
         }
         return self::$instancia;
@@ -29,9 +29,9 @@ class DatabaseConnection
 
     public function getConnection()
     {
-        self::$conexion = new mysqli(self::SERVER, self::USERNAME, self::PASSWORD,self::DB);
+        self::$conexion = new mysqli(self::SERVER, self::USERNAME, self::PASSWORD, self::DB);
 
-        if(self::$conexion->connect_error) {
+        if (self::$conexion->connect_error) {
             die("Error de conexión: " . self::$conexion->connect_error);
         }
     }
@@ -55,7 +55,7 @@ $resultado = $db1->executeSQL("SELECT * FROM usuarios");
 
 if (count($resultado) > 0) {
     foreach ($resultado as $row) {
-        echo "ID: " . $row['id'] . "-  Nombre: " .$row['nombre'] . "<br>";
+        echo "ID: " . $row['id'] . "-  Nombre: " . $row['nombre'] . "<br>";
     }
 } else {
     echo "No se encontraron usuarios.\n ";
