@@ -1,10 +1,10 @@
 {
   "main": {
-    "controller": "MainController",
-    "action": "main"
+    "controller": "TareasController",
+    "action": "list"
   },
   "detalle": {
-    "controller": "DetalleController",
+    "controller": "TareasController",
     "action": "detail"
   },
   "default": {

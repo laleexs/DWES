@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TAREAS</title>
+</head>
+<body>
+<table>
+    <th>Titulo</th>
+    <th>Fecha de creación</th>
+    <th>Acciones</th>
+        <?php foreach ($tareas as $tarea){ ?>
+    <tr>
+        <td><?php echo $tarea['titulo']; ?></td>
+        <td><?php echo $tarea['fecha_creacion']; ?></td>
+        <td><a href="?ruta=detalle&params=<?php echo $tarea['id']; ?>">Ver detalle</a></td>
+    </tr>
+    <?php } ?>
+</table>
+
+</body>
+</html>
